@@ -1,84 +1,82 @@
-import java.util.Arrays;
+
+
+class No {
+    int chave;
+    No proximo;
+
+    public No(int chave) {
+        this.chave = chave;
+        this.proximo = null;
+    }
+}
 
 public class Hash {
-    int[] tabela1; // Tabela de tamanho 10
-    int[] tabela2; // Tabela de tamanho 100
-    int[] tabela3; // Tabela de tamanho 1000
+    No[] tabela1;
+    No[] tabela2;
+    No[] tabela3;
+    int tamanhoTabela1 = 10;
+    int tamanhoTabela2 = 10000;
+    int tamanhoTabela3 = 1000;
 
     public Hash() {
-        tabela1 = new int[10];
-        tabela2 = new int[100];
-        tabela3 = new int[1000];
-
-        // Inicializa as três tabelas com -1
-        Arrays.fill(tabela1, -1);
-        Arrays.fill(tabela2, -1);
-        Arrays.fill(tabela3, -1);
+        tabela1 = new No[tamanhoTabela1];
+        tabela2 = new No[tamanhoTabela2];
+        tabela3 = new No[tamanhoTabela3];
     }
 
-    private int h(int chave) { // hash por divisão
-        return chave % 100;
-    }
-
-    private int h2(int chave, int tamanhoTabela) { // hash por multiplicação
-        double valorFracionario = chave * 0.5 - Math.floor(chave * 0.5);
-        return (int) (tamanhoTabela * valorFracionario);
-    }
-
-    public int tamanho(int[] tabela) {
-        int count = 0;
-        for(int element : tabela) {
-            count++;
+    private int h(int tipo,int chave, int tamanhoTabela) { 
+        if(tipo == 1){
+            return chave % tamanhoTabela;//primeiro tipo de hash
         }
-        return count;
-    }
-
-    private int h3(int chave) { // não implementado ainda
-        return 0;
-    }
-
-    private int r(int i) {
-        return (i + 1) % 100; 
-    }
-
-    public int busca(int chave, int[] tabela) {
-        int i = h(chave);
-        while (tabela[i] != chave && tabela[i] != -1) {
-            i = r(i);
+        else if(tipo == 2){
+            double valorFracionario = chave * 0.5 - Math.floor(chave * 0.5);//segundo tipo de hash
+            return (int) (tamanhoTabela * valorFracionario);
         }
-        if (tabela[i] == -1) {
-            return -1;
-        } else {
-            return i;
+        else if(tipo==3){
+            //inserir terceiro tipo de hash
         }
+        return -1; 
     }
 
-    public void inserir(int chave, int[] tabela) {
-        int i = h(chave);
-        while (tabela[i] != -1) {
-            i = r(i);
-        }
-        tabela[i] = chave;
-    }
+   
 
-    public void exibirTabela(int[] tabela) {
-        int count = tamanho(tabela);
-        for (int i = 0; i < count; i++) { // Usando um loop para evitar length
-            if (tabela[i] != -1) {
-                System.out.println("Posição " + i + ": " + tabela[i]);
+    public void inserir(int tipo,int chave, No[] tabela, int tamanhoTabela) {
+        int i = h(tipo,chave, tamanhoTabela);
+        No novo = new No(chave);
+        if (tabela[i] == null) {
+            tabela[i] = novo;
+        } else { 
+            No atual = tabela[i];
+            while (atual.proximo != null) {
+                atual = atual.proximo;
             }
+            atual.proximo = novo;
+        }
+    }
+
+    public void exibirTabela(No[] tabela, int tamanhoTabela) {
+        for (int i = 0; i < tamanhoTabela; i++) {
+            No atual = tabela[i];
+            System.out.print("Posição " + i + ":");
+            while (atual != null) {
+                System.out.print("-> "+atual.chave);
+                atual = atual.proximo;
+            }
+            System.out.println("");
+        }
+    }
+
+    public void inserirVarios( int tipo,int numero, No[] tabela, int tamanhoTabela) {
+        for (int i = 0; i < numero; i++) {
+            int chave = (int) (Math.random() * 1000000) + 1;
+            inserir(tipo,chave, tabela, tamanhoTabela);
         }
     }
 
     public static void main(String[] args) {
         Hash hash = new Hash();
-        hash.inserir(2213312, hash.tabela2); // Corrigido para usar tabela2
-        hash.inserir(2213317, hash.tabela2);
-        hash.inserir(2213315, hash.tabela2);
-        hash.inserir(2213314, hash.tabela2);
-        hash.inserir(2213313, hash.tabela2);
-        
-        
-        hash.exibirTabela(hash.tabela2);
+
+        hash.inserirVarios(1 , 1000, hash.tabela3, hash.tamanhoTabela3); 
+        hash.exibirTabela(hash.tabela3, hash.tamanhoTabela3); 
     }
 }
