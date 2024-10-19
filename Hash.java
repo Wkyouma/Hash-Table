@@ -81,7 +81,7 @@ public class Hash {
 
         hash.inserirVarios(1 ,2, 9000, hash.tabela2, hash.tamanhoTabela2); 
         hash.exibirTabela(hash.tabela2, hash.tamanhoTabela2); 
-        //tipoH é o tipo de hase que deseja 1 para divisão, 2 para multiplicação e 3 para...
+        //tipoH é o tipo de hash que deseja 1 para divisão, 2 para multiplicação e 3 para...
         //tipoR é o tipo de tratamento de colisão que deseja 1 para encadeamento e 2 para rehashing linear
         //numero é o número de elementos a serem inseridos
         //tabela é a tabela hash que deseja manipular
